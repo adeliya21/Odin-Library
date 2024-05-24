@@ -2,31 +2,51 @@
 let myLibrary = [];
 
 // Create Book object
-function Book(title, author, pages, read) {
+function Book(title, author, pages, isRead) {
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.read = read;
+    this.isRead = isRead;
 }
 
 // Book prototye function
 Book.prototype.toggleRead = function() {
-    this.read = !this.read;
+    this.isRead = !this.isRead;
 }
 
+const addBookBtn = document.getElementById('addBookBtn')
+const addBookModal = document.getElementById('addBookModal')
+const overlay = document.getElementById('overlay')
+const addBookForm = document.getElementById('addBookForm')
+const newBookForm = document.querySelector('#addBookForm');
 
 // Click 'Add a new book' Button
-document.querySelector('#new-book-btn').addEventListener('click', function() {
-    let newBookForm = document.querySelector('#new-book-form');
-    newBookForm.style.display = 'block';
+addBookBtn.onclick = () => {
+    addBookForm.reset()
+    addBookModal.classList.add('active')
+    overlay.classList.add('active')
+}
+
+/*
+document.querySelector('#addBookBtn').addEventListener('click', function() {
+    //let newBookForm = document.querySelector('#addBookForm');
+    //newBookForm.style.display = 'flex';
 })
+*/
 
 // Submit 'Add a new book' Form
-document.querySelector('#new-book-form').addEventListener('submit', function(event) {
+addBookForm.onsubmit = (event) => {
+    event.defaultPrevented;
+    addBookToLibrary();
+}
+
+/*
+document.querySelector('#addBookForm').addEventListener('submit', function(event) {
     //alert('hi');
     event.defaultPrevented;
     addBookToLibrary();
 })
+*/
 
 // Called once 'Add a new book' Form is Submitted
 // Calls render in its turn
@@ -34,18 +54,21 @@ function addBookToLibrary() {
     let title = document.querySelector('#title').value;
     let author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
-    let read = document.querySelector('#read').checked;
+    let isRead = document.querySelector('#isRead').checked;
 
-    let newBook = new Book(title, author, pages, read);
+    let newBook = new Book(title, author, pages, isRead);
     myLibrary.push(newBook);
 
     //console.log(newBook);
     render(); 
+
+    addBookModal.classList.remove('active')
+    overlay.classList.remove('active')
 }
 
 // Render all book cards
 function render() {
-    let libraryEl = document.querySelector('#library');
+    let libraryEl = document.querySelector('#library-grid');
     libraryEl.innerHTML = '';
     for (let i = 0; i <myLibrary.length; i++) {
         let book = myLibrary[i];
@@ -57,8 +80,8 @@ function render() {
             <p class="title">${book.title}</p>
             <p class="author">${book.author}</p>
             <p class="pages">${book.pages}</p>
-            <button class="toggle-read-btn" onclick="toggleRead(${i})">${book.read ? "Read" : "Not Read Yet"}</button>
-            <button class="remove-book-btn" onclick="removeBook(${i})">Remove</button>
+            <button class="btn toggle-read-btn" onclick="toggleRead(${i})">${book.isRead ? "Read" : "Not Read Yet"}</button>
+            <button class="btn remove-book-btn" onclick="removeBook(${i})">Remove</button>
         </div>
         <br>
         `;
