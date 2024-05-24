@@ -11,7 +11,7 @@ header {
 
 main {
     background-color: beige;
-    height: 100vh;
+    display: block;
 }
 
 footer {
