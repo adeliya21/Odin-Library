@@ -14,42 +14,40 @@ Book.prototype.toggleRead = function() {
     this.isRead = !this.isRead;
 }
 
+// UI
 const addBookBtn = document.getElementById('addBookBtn')
 const addBookModal = document.getElementById('addBookModal')
 const overlay = document.getElementById('overlay')
 const addBookForm = document.getElementById('addBookForm')
 const newBookForm = document.querySelector('#addBookForm');
 
-// Click 'Add a new book' Button
+
+// On click and On submit
 addBookBtn.onclick = () => {
     addBookForm.reset()
     addBookModal.classList.add('active')
     overlay.classList.add('active')
 }
 
-/*
-document.querySelector('#addBookBtn').addEventListener('click', function() {
-    //let newBookForm = document.querySelector('#addBookForm');
-    //newBookForm.style.display = 'flex';
-})
-*/
-
-// Submit 'Add a new book' Form
 addBookForm.onsubmit = (event) => {
     event.defaultPrevented;
     addBookToLibrary();
+    render();
+    closeAddBookModal();
 }
 
-/*
-document.querySelector('#addBookForm').addEventListener('submit', function(event) {
-    //alert('hi');
-    event.defaultPrevented;
-    addBookToLibrary();
-})
-*/
+// functions
 
-// Called once 'Add a new book' Form is Submitted
-// Calls render in its turn
+function openAddBookModal() {
+    addBookModal.classList.add('active')
+    overlay.classList.add('active')
+}
+
+function closeAddBookModal() {
+    addBookModal.classList.remove('active')
+    overlay.classList.remove('active')
+}
+
 function addBookToLibrary() {
     let title = document.querySelector('#title').value;
     let author = document.querySelector('#author').value;
@@ -58,15 +56,8 @@ function addBookToLibrary() {
 
     let newBook = new Book(title, author, pages, isRead);
     myLibrary.push(newBook);
-
-    //console.log(newBook);
-    render(); 
-
-    addBookModal.classList.remove('active')
-    overlay.classList.remove('active')
 }
 
-// Render all book cards
 function render() {
     let libraryEl = document.querySelector('#library-grid');
     libraryEl.innerHTML = '';
@@ -75,7 +66,6 @@ function render() {
         let bookEl = document.createElement('div');
         //bookEl.setAttribute('class', 'book-card');
         bookEl.innerHTML = `
-        <br>
         <div class="book-card">
             <p class="title">${book.title}</p>
             <p class="author">${book.author}</p>
@@ -83,19 +73,16 @@ function render() {
             <button class="btn toggle-read-btn" onclick="toggleRead(${i})">${book.isRead ? "Read" : "Not Read Yet"}</button>
             <button class="btn remove-book-btn" onclick="removeBook(${i})">Remove</button>
         </div>
-        <br>
         `;
         libraryEl.appendChild(bookEl);
     }
 }
 
-// Remove Book - <button class="remove-book-btn" onclick="removeBook(${i})">...</button>
 function removeBook(index) {
     myLibrary.splice(index, 1); // removes from array
     render(); // removes from div
 }
 
-// Toggle read - <button class="toggle-read-btn" onclick="toggleRead(${i})">...</button>
 function toggleRead(index) {
     myLibrary[index].toggleRead();
     render(); // refresh
