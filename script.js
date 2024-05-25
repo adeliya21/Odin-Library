@@ -24,9 +24,8 @@ const newBookForm = document.querySelector('#addBookForm');
 
 // On click and On submit
 addBookBtn.onclick = () => {
-    addBookForm.reset()
-    addBookModal.classList.add('active')
-    overlay.classList.add('active')
+    addBookForm.reset();
+    openAddBookModal();
 }
 
 addBookForm.onsubmit = (event) => {
